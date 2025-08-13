@@ -22,7 +22,7 @@ The first version used **OpenAI** for both embeddings and the LLM:
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.llms import OpenAI
 ```
-##Problem
+## Problem
 Using OpenAI requires:
 
 A valid API key (OPENAI_API_KEY).
