@@ -109,74 +109,6 @@ context = " ".join([d.page_content for d in docs])
 answer = qa_pipeline(f"Answer the question based on context:\n{context}\nQuestion: {query}")
 print(answer[0]['generated_text'])
 ```
-## 🔄 RAG Pipeline – Full LLM Process
-
-Below is the step-by-step Retrieval-Augmented Generation (RAG) workflow used in this project:
-
-            ┌────────────────────────┐
-            │   1. Document Source    │
-            │ (PDF, Web, Database...) │
-            └─────────────┬───────────┘
-                          │
-                          ▼
-            ┌────────────────────────┐
-            │  2. Text Splitting      │
-            │  (Chunk documents into  │
-            │   manageable segments)  │
-            └─────────────┬───────────┘
-                          │
-                          ▼
-            ┌────────────────────────┐
-            │  3. Embedding Model     │
-            │  (multilingual-e5-base) │
-            │  Convert chunks → Vectors│
-            └─────────────┬───────────┘
-                          │
-                          ▼
-            ┌────────────────────────┐
-            │  4. Vector Store (FAISS)│
-            │  Store embeddings for   │
-            │  fast similarity search │
-            └─────────────┬───────────┘
-                          │
-           ┌──────────────┴────────────────────────────┐
-           │                                             │
-           ▼                                             ▼
-┌────────────────────────┐                   ┌────────────────────────┐
-│  5. User Query          │                   │  6. Query Embedding     │
-│  (Natural language)     │                   │  Convert query → Vector │
-└─────────────┬───────────┘                   └─────────────┬───────────┘
-              │                                             │
-              └──────────────────┬─────────────────────────┘
-                                 ▼
-                    ┌────────────────────────┐
-                    │  7. Similarity Search   │
-                    │  Retrieve top relevant  │
-                    │  chunks from FAISS      │
-                    └─────────────┬───────────┘
-                                  │
-                                  ▼
-                    ┌────────────────────────┐
-                    │  8. Context Injection   │
-                    │  Combine retrieved text │
-                    │  with user query prompt │
-                    └─────────────┬───────────┘
-                                  │
-                                  ▼
-                    ┌────────────────────────┐
-                    │  9. LLM (ALLaM-7B)      │
-                    │  Generate grounded      │
-                    │  answer using context   │
-                    └─────────────┬───────────┘
-                                  │
-                                  ▼
-                    ┌────────────────────────┐
-                    │  10. Output Formatting  │
-                    │  Style answer + measure │
-                    │  accuracy & speed       │
-                    └────────────────────────┘
-
-
 ---
 
 ### 📌 Summary of Steps
@@ -189,19 +121,7 @@ Below is the step-by-step Retrieval-Augmented Generation (RAG) workflow used in 
 7. **Similarity Search** – Find top matches from FAISS.  
 8. **Context Injection** – Combine matches + query.  
 9. **LLM Generation** – ALLaM model produces grounded answer.  
-10. **Output Formatting** – Style, measure accuracy, benchmark speed.  
-
----
-
-
-
-## 📊 Future Enhancements
-- **Answer Styling** – Format answers with improved readability and structure.  
-- **Accuracy Metrics** – Measure how relevant the answer is to the query.  
-- **Speed Metrics** – Benchmark response times for different models.  
-- **Fine-Tuning** – Train `ALLaM` on custom datasets for domain-specific accuracy.  
-
-
+ 
 ---
 
 ## 📚 References
