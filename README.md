@@ -68,13 +68,15 @@ To avoid API key issues and gain full control, the project was updated to use **
 6. **Answer Generation** – Feed retrieved text to `ALLaM-7B-Instruct` for the final answer.
 
 ## 📦 Installation
+```python
 pip install langchain
 pip install pypdf
 pip install faiss-cpu
 pip install transformers
 pip install sentence-transformers
-
+```
 ## ▶️ Usage
+```python
 from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import CharacterTextSplitter
 from langchain_community.vectorstores import FAISS
@@ -106,7 +108,7 @@ qa_pipeline = pipeline(
 context = " ".join([d.page_content for d in docs])
 answer = qa_pipeline(f"Answer the question based on context:\n{context}\nQuestion: {query}")
 print(answer[0]['generated_text'])
-
+```
 
 ## 📊 Future Enhancements
 - **Answer Styling** – Format answers with improved readability and structure.  
