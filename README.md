@@ -21,7 +21,8 @@ The first version used **OpenAI** for both embeddings and the LLM:
 ```python
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.llms import OpenAI
-❌ Problem
+
+##Problem
 Using OpenAI requires:
 
 A valid API key (OPENAI_API_KEY).
@@ -32,101 +33,3 @@ Pay-per-request charges.
 
 If the API key is missing, expired, or incorrect, the app will fail.
 Additionally, OpenAI models are closed-source, meaning no local hosting or customization.
-
-✅ Open-Source Solution
-To avoid API key issues and gain full control, I switched to completely open-source models:
-
-🔹 Embeddings
-intfloat/multilingual-e5-base
-
-Supports multiple languages including Arabic.
-
-Runs locally on CPU or GPU.
-
-No API key required.
-
-🔹 Language Model
-ALLaM-AI/ALLaM-7B-Instruct-preview
-
-Arabic-English capable.
-
-Can run fully offline.
-
-Fine-tuning is possible for domain-specific use cases.
-
-💡 Why Open-Source is Better
-No API Key – No external authentication needed.
-
-Offline Ready – Works without internet access.
-
-Data Privacy – Your documents never leave your machine.
-
-Customizable – Can be fine-tuned for higher accuracy.
-
-Cost-Free – No usage charges per request.
-
-⚙️ Workflow
-PDF Reading – Extract text using PyPDF2 or LangChain loaders.
-
-Text Splitting – Use CharacterTextSplitter to break text into chunks.
-
-Embeddings – Generate vector representations with multilingual-e5-base.
-
-Vector Store – Store embeddings in FAISS for fast similarity search.
-
-Retrieval – Find the most relevant chunks for a query.
-
-Answer Generation – Feed retrieved text to ALLaM-7B-Instruct for final output.
-
-📦 Installation
-bash
-نسخ
-تحرير
-pip install langchain
-pip install pypdf
-pip install faiss-cpu
-pip install transformers
-pip install sentence-transformers
-▶️ Usage
-python
-نسخ
-تحرير
-from langchain_community.document_loaders import PyPDFLoader
-from langchain.text_splitter import CharacterTextSplitter
-from langchain_community.vectorstores import FAISS
-from langchain_community.embeddings import HuggingFaceEmbeddings
-from transformers import pipeline
-
-# 1. Load and split PDF
-loader = PyPDFLoader("document.pdf")
-documents = loader.load()
-splitter = CharacterTextSplitter(chunk_size=800, chunk_overlap=200)
-texts = splitter.split_documents(documents)
-
-# 2. Create embeddings
-embeddings = HuggingFaceEmbeddings(model_name="intfloat/multilingual-e5-base")
-vectorstore = FAISS.from_documents(texts, embeddings)
-
-# 3. Search for relevant chunks
-query = "What are the admission requirements?"
-docs = vectorstore.similarity_search(query)
-
-# 4. Load ALLaM model
-qa_pipeline = pipeline(
-    "text-generation",
-    model="ALLaM-AI/ALLaM-7B-Instruct-preview",
-    device_map="auto"
-)
-
-# 5. Generate answer
-context = " ".join([d.page_content for d in docs])
-answer = qa_pipeline(f"Answer the question based on context:\n{context}\nQuestion: {query}")
-print(answer[0]['generated_text'])
-📚 References
-LangChain Documentation
-
-Hugging Face Models
-
-ALLaM-AI/ALLaM-7B-Instruct-preview
-
-intfloat/multilingual-e5-base
